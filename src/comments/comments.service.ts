@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CreateCommentDto, findAllParameters } from './dto/create-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
+import { v4 as uuid } from 'uuid' 
 
 @Injectable()
 export class CommentsService {
