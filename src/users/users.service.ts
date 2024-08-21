@@ -36,7 +36,7 @@ export class UsersService {
         })
 
         if(!userFound){
-            null
+            return null
         }
         return {
             id: userFound.id,

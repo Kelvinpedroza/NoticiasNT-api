@@ -1,6 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
-@Entity({ name: 'user' })
+@Entity({ name: 'users' })
 export class UserEntity {
     @PrimaryGeneratedColumn('uuid')
     id: string;
@@ -14,9 +14,9 @@ export class UserEntity {
     firstQuestion: string
     @Column({ type: 'varchar', name: 'secondquestion' })
     secondQuestion: string
-    @Column({ type: 'timestamptz', name: 'created_at' })
+    @CreateDateColumn({ type: 'timestamptz', name: 'created_at' })
     created_at: Date
-    @Column({ type: 'timestamptz', name: 'updated_at' })
+    @UpdateDateColumn({ type: 'timestamptz', name: 'updated_at', nullable: true })
     update: Date
 
 }
