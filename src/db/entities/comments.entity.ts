@@ -1,18 +1,22 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
-@Entity({name: 'comments'})
-export class CommentsEntity{
-    @PrimaryGeneratedColumn('uuid')
-    id: string;
+@Entity('comments')
+export class CommentsEntity {
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
-    @Column({type: 'varchar'})
-    userName: string
-    @Column({type: 'varchar'})
-    description: string
-    @Column({type: 'varchar'})
-    rating: string
-    @Column({type: 'timestamptz', name: 'created_at'})
-    created_at: Date
-    @Column({type: 'timestamptz', name: 'deleted_at'})
-    deleted_at: Date
+  @Column({ type: 'varchar', length: 255 , name:'username'})
+  userName: string;
+
+  @Column({ type: 'text', nullable: true })
+  description: string;
+
+  @Column({ type: 'varchar', length: 10, nullable: true })
+  rating: string;
+
+  @Column({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
+  created_at: Date;
+
+  @Column({ type: 'timestamptz', nullable: true })
+  deleted_at: Date;
 }
