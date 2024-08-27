@@ -22,13 +22,13 @@ export class CommentsService {
     newComment.userName = createCommentDto.userName;
     newComment.description = createCommentDto.description;
     newComment.rating = createCommentDto.rating;
+
     try {
       new Date(createCommentDto.created_at);
     } catch (error) {
       throw new BadRequestException('Invalid date format for created_at');
     }
     const createComent = await this.commentsRepository.save(newComment)
-    console.log(createComent)
     
     return this.mapEntityToDto(createComent);
   }
