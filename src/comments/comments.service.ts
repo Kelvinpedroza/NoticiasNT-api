@@ -1,7 +1,6 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateCommentDto, findAllParameters } from './dto/create-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
-import { v4 as uuid, v4 } from 'uuid'
 import { CommentsEntity } from 'src/db/entities/comments.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -16,7 +15,7 @@ export class CommentsService {
   ) { }
 
 
-  async create(createCommentDto: CreateCommentDto) {
+  async createComment(createCommentDto: CreateCommentDto) {
 
     const newComment = new CommentsEntity();
     newComment.userName = createCommentDto.userName;
