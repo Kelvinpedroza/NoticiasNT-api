@@ -3,7 +3,7 @@
 // import { TypeOrmModule } from '@nestjs/typeorm';
 
 // @Module({
-//     imports: [TypeOrmModule.forRootAsync({
+//     imports: [.forRootAsync({
 //         useFactory: async (configService: ConfigService) => ({
 //             type: 'postgres',
 //             host: configService.get<string>('DB_HOST'),
@@ -30,8 +30,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
             useFactory: async (configService: ConfigService) => ({
                 type: 'postgres',
                 url: configService.get<string>('DATABASE_URL'), // Usando a URL completa
-                entities: [__dirname + '/entities/**'],
-                migrations: [__dirname + '/migrations/*.ts'],
+                entities: [__dirname + '/entities/**{.ts,.js}'],
+                migrations: [__dirname + '/migrations/*{.ts,.js}'],
                 synchronize: false,
                 ssl: {
                     rejectUnauthorized: false, // Necessário para o Neon
