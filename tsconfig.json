@@ -17,5 +17,7 @@
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false
-  }
+  },
+  "include": ["src/**/*.ts"],  // Incluir todos os arquivos TypeScript dentro de src
+  "exclude": ["node_modules"]
 }
