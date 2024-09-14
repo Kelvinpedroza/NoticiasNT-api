@@ -15,7 +15,7 @@ export class CommentsService {
   ) { }
 
 
-  async createComment(createCommentDto: CreateCommentDto) {
+  async create(createCommentDto: CreateCommentDto) {
 
     const newComment = new CommentsEntity();
     newComment.userName = createCommentDto.userName;

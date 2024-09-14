@@ -11,7 +11,7 @@ export class CommentsController {
 
   @Post()
   async create(@Body() createCommentDto: CreateCommentDto) {
-    return await this.commentsService.createComment(createCommentDto);
+    return await this.commentsService.create(createCommentDto);
   }
 
   @Get()
