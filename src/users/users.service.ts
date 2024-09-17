@@ -47,8 +47,5 @@ export class UsersService {
         }
     }
 
-    async chanegerPassword(userName: string): Promise<UserDto | null > {
-        
-        return 
-    }
+    
 }

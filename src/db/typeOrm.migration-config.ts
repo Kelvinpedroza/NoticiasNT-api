@@ -1,10 +1,10 @@
-// import { ConfigService } from '@nestjs/config';
-// import { config } from 'dotenv'
-// import { DataSource, DataSourceOptions } from 'typeorm';
-// import { CommentsEntity } from './entities/comments.entity';
-// import { UserEntity } from './entities/user.entity';
+import { ConfigService } from '@nestjs/config';
+import { config } from 'dotenv'
+import { DataSource, DataSourceOptions } from 'typeorm';
+import { CommentsEntity } from './entities/comments.entity';
+import { UserEntity } from './entities/user.entity';
 
-// config();
+config();
 
 // const configService = new ConfigService();
 
@@ -22,13 +22,7 @@
 
 // export default new DataSource(dataSourceOptions);
 
-import { ConfigService } from '@nestjs/config';
-import { config } from 'dotenv';
-import { DataSource, DataSourceOptions } from 'typeorm';
-import { CommentsEntity } from './entities/comments.entity';
-import { UserEntity } from './entities/user.entity';
 
-config();  // Carrega o .env
 
 const configService = new ConfigService();
 
