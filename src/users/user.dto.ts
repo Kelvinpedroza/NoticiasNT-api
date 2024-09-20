@@ -26,6 +26,9 @@ export class UserDto {
     @IsString()
     secondQuestion: string
 
+    @IsOptional()
+    recoverPasswordToken?: string
+
     @Type(() => Date)
     created_at?: Date
 
