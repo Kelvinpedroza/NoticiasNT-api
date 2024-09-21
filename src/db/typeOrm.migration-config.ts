@@ -6,6 +6,8 @@ import { UserEntity } from './entities/user.entity';
 
 config();
 
+// const configService = new ConfigService();
+
 
 // const dataSourceOptions: DataSourceOptions = {
 //     type: 'postgres',

@@ -1,30 +1,34 @@
 version: '3.8'
 
 services:
+  db:
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_USER: postgresNT
+      POSTGRES_PASSWORD: 1234578
+      POSTGRES_DB: nt-api
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
   app:
+    image: nt-api 
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile 
+    restart: always
     environment:
-      DATABASE_URL: ${DATABASE_URL}
-      PGUSER: ${PGUSER}
-      PGPASSWORD: ${PGPASSWORD}
-      PGDATABASE: ${PGDATABASE}
-      PGHOST: ${PGHOST}
-      PGPORT: ${PGPORT}
+      JWT_SECRET: eqweqweqdsfsdfsdfds
+      JWT_EXPIRATION_TIME: 3600
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USERNAME: postgresNT
+      DB_PASSWORD: 1234578
+      DB_NAME: nt-api
     ports:
-      - "3000:3000"
-    depends_on:
-      - postgres
-
-  postgres:
-    image: postgres:latest
-    environment:
-      POSTGRES_DB: ${PGDATABASE}
-      POSTGRES_USER: ${PGUSER}
-      POSTGRES_PASSWORD: ${PGPASSWORD}
-    volumes:
-      - pgdata:/var/lib/postgresql/data
+      - "3000:3000" 
 
 volumes:
-  pgdata:
+  db_data:
