@@ -1,4 +1,4 @@
-import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { UserDto } from './user.dto';
 import { hashSync as bcryptHashSync } from 'bcrypt';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -6,6 +6,8 @@ import { UserEntity } from '../db/entities/user.entity';
 import { Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
+import { RecoverDto } from './Recover.dto';
+import { Console } from 'console';
 
 @Injectable()
 export class UsersService {
@@ -46,7 +48,7 @@ export class UsersService {
         dbUser.firstQuestion = newUser.firstQuestion;
         dbUser.secondQuestion = newUser.secondQuestion;
         dbUser.passwordHash = bcryptHashSync(newUser.password, 10);
-        
+
         const { id, userName } = await this.usersRepository.save(dbUser);
         return { id, userName };
     }
@@ -63,7 +65,7 @@ export class UsersService {
         return {
             id: userFound.id,
             userName: userFound.userName,
-            password: userFound.passwordHash, // Geralmente, você não retorna a senha
+            password: userFound.passwordHash,
             email: userFound.email,
             firstQuestion: userFound.firstQuestion,
             secondQuestion: userFound.secondQuestion,
@@ -71,12 +73,14 @@ export class UsersService {
         };
     }
 
-    async recoverPassword(user: UserDto): Promise<string | null> {
+    async recoverPassword(user: RecoverDto): Promise<string | null | object> {
         const token = await this.recoverPassFirstStep(user);
-        return token;
+        return {
+            token: token
+        };
     }
 
-    private generateToken(user: UserDto): string {
+    private generateToken(user: RecoverDto): string {
         const payload = {
             email: user.email,
         };
@@ -84,19 +88,53 @@ export class UsersService {
         return this.jwtService.sign(payload, { secret: this.secret, expiresIn: this.jwtExpirationTimeInSeconds });
     }
 
-    async recoverPassFirstStep(user: UserDto): Promise<string | null> {
+    async recoverPassFirstStep(userRecover: RecoverDto): Promise<{ message: string; token?: string }> {
         const findUser = await this.usersRepository.findOne({
-            where: { email: user.email }
+            where: { email: userRecover.email }
         });
 
         if (!findUser) {
             throw new NotFoundException('Usuário não encontrado');
         }
 
-        if (findUser.firstQuestion === user.firstQuestion && findUser.secondQuestion === user.secondQuestion) {
-            return this.generateToken(this.toDto(findUser)); // Retorna o token
+        if (findUser.firstQuestion === userRecover.firstQuestion && findUser.secondQuestion === userRecover.secondQuestion) {
+            if (findUser.recoverPasswordToken) {
+                findUser.recoverPasswordToken = '';
+            }
+
+            const token = this.generateToken(this.toDto(findUser));
+            findUser.recoverPasswordToken = token;
+
+            await this.usersRepository.save(findUser);
+
+            return {
+                message: 'true',
+                token: token
+            };
         }
 
         throw new NotFoundException('Respostas de segurança incorretas');
     }
+
+    async recoverPassSecondStep(userRecover): Promise< {message:string, email: string} > {
+        const findUser =  this.usersRepository.findOne({
+            where: {email: userRecover.email}
+        })
+        if(userRecover.recoverPasswordToken === (await findUser).recoverPasswordToken){
+            const dbUser = new UserEntity();
+            dbUser.email = userRecover.email;
+            dbUser.userName = userRecover.userName;
+            dbUser.firstQuestion = userRecover.firstQuestion;
+            dbUser.secondQuestion = userRecover.secondQuestion;
+            dbUser.passwordHash = bcryptHashSync(userRecover.password, 10);
+
+            return {
+                message:'true',
+                email: userRecover.email
+            }
+        }
+
+        throw new UnauthorizedException('Token invalido ou ausente')
+    }
 }
+

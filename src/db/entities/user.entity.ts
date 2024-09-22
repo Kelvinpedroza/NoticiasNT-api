@@ -14,7 +14,7 @@ export class UserEntity {
     firstQuestion: string
     @Column({ type: 'varchar', name: 'secondquestion' })
     secondQuestion: string
-    @Column({type:'varchar'})
+    @Column({type:'varchar', name:'recoverpassword'})
     recoverPasswordToken: string
     @CreateDateColumn({ type: 'timestamptz', name: 'created_at' })
     created_at: Date

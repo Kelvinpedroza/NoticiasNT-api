@@ -10,6 +10,7 @@ export class CreateUserTable1628849534983 implements MigrationInterface {
         email varchar(256) UNIQUE NOT NULL,
         firstquestion varchar(256),
         secondquestion varchar(256),
+        recoverPassword varchar(256),
         created_at timestamptz NOT NULL DEFAULT NOW(),
         updated_at timestamptz NULL DEFAULT NOW(),
         CONSTRAINT user_pk PRIMARY KEY (id),

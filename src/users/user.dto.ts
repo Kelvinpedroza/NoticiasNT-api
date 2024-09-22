@@ -10,21 +10,21 @@ export class UserDto {
     @IsString()
     @MinLength(3)
     @MaxLength(256)
-    userName: string
+    userName?: string
 
     @IsString()
     @MinLength(3)
     @MaxLength(256)
-    password: string
+    password?: string
 
     @IsEmail()
-    email: string
+    email?: string
 
     @IsString()
-    firstQuestion: string
+    firstQuestion?: string
 
     @IsString()
-    secondQuestion: string
+    secondQuestion?: string
 
     @IsOptional()
     recoverPasswordToken?: string
