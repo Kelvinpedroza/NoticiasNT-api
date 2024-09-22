@@ -3,15 +3,11 @@ import { IsEmail, IsOptional, IsString, IsUUID, MaxLength, MinLength } from "cla
 
 
 export class RecoverDto{
-    @IsEmail()
     email?: string
 
-    @IsString()
     firstQuestion?: string
 
-    @IsString()
     secondQuestion?: string
 
-    @IsOptional()
     recoverPasswordToken?: string
 }

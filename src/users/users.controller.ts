@@ -1,4 +1,4 @@
-import { Body, Controller, HttpStatus, Patch, Post, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, HttpStatus, Patch, Post, Put, Res, UseGuards } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UserDto } from './user.dto';
 import { AuthGuard } from '../auth/auth.guard';
@@ -13,6 +13,7 @@ export class UsersController {
     create(@Body() user: UserDto) {
         this.usersService.create(user)
     }
+    @UseGuards(AuthGuard)
     @Post('recover')
     async recoverPass(@Body() recoveDto:RecoverDto, @Res() res:Response){
         const result = this.usersService.recoverPassFirstStep(recoveDto)
@@ -22,7 +23,8 @@ export class UsersController {
             recoverTokenPassword: ((await result).token)
         })
     }
-    @Patch('recover/second')
+    @UseGuards(AuthGuard)
+    @Put('recover/second')
     async recoverPassSecond(@Body() recoverDto: RecoverDto, @Res() res:Response){
         const result = this.usersService.recoverPassSecondStep(recoverDto)
         

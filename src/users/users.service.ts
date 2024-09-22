@@ -1,14 +1,12 @@
 import { ConflictException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { UserDto } from './user.dto';
-import { hashSync as bcryptHashSync } from 'bcrypt';
+import { genSaltSync ,hashSync as bcryptHashSync } from 'bcrypt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from '../db/entities/user.entity';
 import { Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { RecoverDto } from './Recover.dto';
-import { Console } from 'console';
-
 @Injectable()
 export class UsersService {
     private secret: string;
@@ -32,7 +30,7 @@ export class UsersService {
             email: userEntity.email,
             firstQuestion: userEntity.firstQuestion,
             secondQuestion: userEntity.secondQuestion,
-            password: '', // Não deve ser exposto, mas se necessário, você pode usar isso como placeholder
+            password: '',
         };
     }
     async create(newUser: UserDto) {
@@ -117,17 +115,18 @@ export class UsersService {
     }
 
     async recoverPassSecondStep(userRecover): Promise< {message:string, email: string} > {
-        const findUser =  this.usersRepository.findOne({
+        const findUser =  await this.usersRepository.findOne({
             where: {email: userRecover.email}
         })
+        if (!findUser) {
+            throw new NotFoundException('Usuário não encontrado');
+        }
+    
         if(userRecover.recoverPasswordToken === (await findUser).recoverPasswordToken){
-            const dbUser = new UserEntity();
-            dbUser.email = userRecover.email;
-            dbUser.userName = userRecover.userName;
-            dbUser.firstQuestion = userRecover.firstQuestion;
-            dbUser.secondQuestion = userRecover.secondQuestion;
-            dbUser.passwordHash = bcryptHashSync(userRecover.password, 10);
-
+            const saltRounds = 10
+            const salt = genSaltSync(saltRounds)
+            findUser.passwordHash = bcryptHashSync(userRecover.password, salt);
+            await this.usersRepository.save(findUser); 
             return {
                 message:'true',
                 email: userRecover.email

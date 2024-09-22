@@ -4,11 +4,11 @@ import { CreateCommentDto, findAllParameters } from './dto/create-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
 import { AuthGuard } from '../auth/auth.guard';
 
-@UseGuards(AuthGuard)
 @Controller('comments')
 export class CommentsController {
-  constructor(private readonly commentsService: CommentsService) {}
+  constructor(private readonly commentsService: CommentsService) { }
 
+  @UseGuards(AuthGuard)
   @Post()
   async create(@Body() createCommentDto: CreateCommentDto) {
     return await this.commentsService.create(createCommentDto);
@@ -24,11 +24,13 @@ export class CommentsController {
     return this.commentsService.findOneComment(id);
   }
 
+  @UseGuards(AuthGuard)
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateCommentDto: UpdateCommentDto) {
     return this.commentsService.update(id, updateCommentDto);
   }
 
+  @UseGuards(AuthGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.commentsService.remove(id);
