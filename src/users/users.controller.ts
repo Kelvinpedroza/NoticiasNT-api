@@ -10,8 +10,9 @@ export class UsersController {
     constructor(private readonly usersService: UsersService) { }
 
     @Post('cadastro')
-    create(@Body() user: UserDto, result: string ,@Res() res:Response) {
-        this.usersService.create(user)
+    async create(@Body() user: UserDto) {
+        const result = await this.usersService.create(user)
+        return result
     }
     @UseGuards(AuthGuard)
     @Post('recover')

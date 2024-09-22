@@ -42,7 +42,6 @@ export class UsersService {
                 error: 'EmailInUse',
                 statusCode: 409
             });            
-            
         }
 
         const dbUser = new UserEntity();

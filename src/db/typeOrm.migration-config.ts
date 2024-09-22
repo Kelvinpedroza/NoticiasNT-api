@@ -29,12 +29,12 @@ const configService = new ConfigService();
 
 const dataSourceOptions: DataSourceOptions = {
     type: 'postgres',
-    url: configService.get<string>('DATABASE_URL'),  // Usando a URL completa
+    url: configService.get<string>('DATABASE_URL'), 
     entities: [CommentsEntity, UserEntity],
-    migrations: [__dirname + '/migrations/*.{ts,js}'],  // Suporte para .ts e .js
-    synchronize: false,  // Desabilitado para produção
+    migrations: [__dirname + '/migrations/*.{ts,js}'],  
+    synchronize: false,  
     ssl: {
-        rejectUnauthorized: false,  // Necessário para serviços como o Neon ou Heroku
+        rejectUnauthorized: false,  
     },
 };
 

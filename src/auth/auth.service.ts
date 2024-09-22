@@ -24,6 +24,6 @@ export class AuthService {
         const payload = { sub: foundUser.id, userEmail: foundUser.email };
 
         const token = this.jwtService.sign(payload)
-        return { userEmail: foundUser.email, token, expiresIn: this.jwtExpirationTimeInSeconds }
+        return { userEmail: foundUser.email, userName:foundUser.userName ,token, expiresIn: this.jwtExpirationTimeInSeconds }
     }
 }
