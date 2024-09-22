@@ -19,5 +19,5 @@ RUN npm run build
 # Expõe a porta na qual a aplicação irá rodar
 EXPOSE 3000
 
-# Comando para iniciar a aplicação
-CMD ["npm", "run", "start:prod"]
+# # Comando para iniciar a aplicação
+# CMD ["npm", "run",]

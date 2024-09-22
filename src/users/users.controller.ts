@@ -10,7 +10,7 @@ export class UsersController {
     constructor(private readonly usersService: UsersService) { }
 
     @Post('cadastro')
-    create(@Body() user: UserDto) {
+    create(@Body() user: UserDto, result: string ,@Res() res:Response) {
         this.usersService.create(user)
     }
     @UseGuards(AuthGuard)

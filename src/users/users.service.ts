@@ -34,10 +34,15 @@ export class UsersService {
         };
     }
     async create(newUser: UserDto) {
-        const userAlreadyRegistered = await this.findByUserName(newUser.userName);
+        const userAlreadyRegistered = await this.findByUserName(newUser.email);
 
         if (userAlreadyRegistered) {
-            throw new ConflictException(`User ${newUser.userName} já foi cadastrado`);
+            throw new ConflictException({
+                message: `O email ${newUser.email} já está em uso.`,
+                error: 'EmailInUse',
+                statusCode: 409
+            });            
+            
         }
 
         const dbUser = new UserEntity();
@@ -51,9 +56,9 @@ export class UsersService {
         return { id, userName };
     }
 
-    async findByUserName(userName: string): Promise<UserDto | null> {
+    async findByUserName(email: string): Promise<UserDto | null> {
         const userFound = await this.usersRepository.findOne({
-            where: { userName }
+            where: { email }
         });
 
         if (!userFound) {
