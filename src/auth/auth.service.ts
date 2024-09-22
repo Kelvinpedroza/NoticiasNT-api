@@ -14,17 +14,16 @@ export class AuthService {
         this.secret = this.configService.get<string>('JWT_SECRET');
     }
 
-    async signIn(userName: string, password: string): Promise<AuthResponseDto> {
-        const foundUser =  await this.userService.findByUserName(userName)
+    async signIn(userEmail: string, password: string): Promise<AuthResponseDto> {
+        const foundUser = await this.userService.findByUserName(userEmail)
 
         if (!foundUser || !compareSync(password, foundUser.password)) {
             throw new UnauthorizedException();
         }
 
-        const payload = { sub: foundUser.id, userName: foundUser.userName };
+        const payload = { sub: foundUser.id, userEmail: foundUser.email };
 
         const token = this.jwtService.sign(payload)
-        console.log(token)
-        return { token, expiresIn: this.jwtExpirationTimeInSeconds }
+        return { userEmail: foundUser.email, token, expiresIn: this.jwtExpirationTimeInSeconds }
     }
 }
