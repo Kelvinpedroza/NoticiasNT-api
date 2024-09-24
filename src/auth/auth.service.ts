@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from '../users/users.service';
 import { AuthResponseDto } from './auth.dto';
@@ -18,7 +18,7 @@ export class AuthService {
         const foundUser = await this.userService.findByUserName(userEmail)
 
         if (!foundUser || !compareSync(password, foundUser.password)) {
-            throw new UnauthorizedException();
+            throw new NotFoundException('login ou senha incorretos');
         }
 
         const payload = { sub: foundUser.id, userEmail: foundUser.email };

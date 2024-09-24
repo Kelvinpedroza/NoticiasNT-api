@@ -14,7 +14,6 @@ export class UsersController {
         const result = await this.usersService.create(user)
         return result
     }
-    @UseGuards(AuthGuard)
     @Post('recover')
     async recoverPass(@Body() recoveDto:RecoverDto, @Res() res:Response){
         const result = this.usersService.recoverPassFirstStep(recoveDto)
